@@ -64,6 +64,7 @@
             background: #ff4d4d;
             color: white;
             position: absolute;
+            transition: transform 0.3s ease-in-out;
         }
         .image-container {
             width: 100%;
@@ -87,9 +88,6 @@
         .image-container img.visible {
             opacity: 1;
         }
-        .hidden {
-            display: none;
-        }
         .love-message {
             font-size: 1.5rem;
             color: white;
@@ -99,30 +97,22 @@
             background: rgba(255, 255, 255, 0.2);
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
-            display: none;
-            animation: fadeIn 1s ease-in-out;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease-in-out, visibility 0.8s;
+        }
+        .love-message.show {
+            opacity: 1;
+            visibility: visible;
         }
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         @media (min-width: 768px) {
-            body {
-                flex-direction: row;
-            }
-            .container {
-                width: 50%;
-            }
-            .image-container {
-                width: 50%;
-                height: 100vh;
-            }
+            body { flex-direction: row; }
+            .container { width: 50%; }
+            .image-container { width: 50%; height: 100vh; }
         }
     </style>
 </head>
@@ -133,7 +123,7 @@
             <button id="yes-button">Yes 💛</button>
             <button id="no-button">No 💔</button>
         </div>
-        <div id="love-message" class="love-message hidden">
+        <div id="love-message" class="love-message">
             "You just made my heart dance with joy! 💃❤️<br>
             With you, every day feels magical, and I promise to cherish and adore you forever. 💕
             Our love story is just beginning, and I can't wait for all the beautiful moments ahead. 🌹💞"
@@ -143,17 +133,8 @@
         <img src="./assets/02.jpg" class="visible">
         <img src="./assets/01.jpg">
         <img src="./assets/03.jpg">
-        <img src="./assets/12.jpg">
-        <img src="./assets/04.jpg">
-        <img src="./assets/05.webp">
-        <img src="./assets/06.jpg">
-        <img src="./assets/07.jpg">
-        <img src="./assets/08.jpg">
-        <img src="./assets/09.jpg">
-        <img src="./assets/10.jpg">
-        <img src="./assets/11.jpg">
-        <img src="./assets/13.jpg">
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.3.2"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const yesButton = document.getElementById('yes-button');
@@ -163,8 +144,9 @@
             let imageIndex = 0;
 
             yesButton.addEventListener('click', () => {
-                loveMessage.style.display = 'block';
+                loveMessage.classList.add('show');
                 noButton.style.display = 'none';
+                confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
             });
 
             noButton.addEventListener('mouseover', () => {
